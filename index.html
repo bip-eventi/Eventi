@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il tuo evento</title>
+<style>
+  :root{--bg:#f5f5f7;--card:#fff;--tx:#1d1d1f;--mut:#6e6e73;--ac:#0071e3;--r:16px}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--tx)}
+  header{padding:32px 20px 8px;max-width:560px;margin:auto}
+  h1{margin:0 0 6px;font-size:28px}
+  header p{margin:0;color:var(--mut)}
+  main{max-width:560px;margin:auto;padding:16px 20px 48px}
+  .sede{width:100%;text-align:left;background:var(--card);border:0;border-radius:var(--r);padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);cursor:pointer;font:inherit;color:inherit;display:flex;justify-content:space-between;align-items:center}
+  .sede b{font-size:18px}
+  .sede span{color:var(--mut);font-size:14px;display:block;margin-top:2px}
+  .tag{background:#e8f1fd;color:var(--ac);font-size:13px;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .dettaglio{background:var(--card);border-radius:var(--r);padding:22px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .dettaglio h2{margin:0 0 4px;font-size:24px}
+  .riga{display:flex;gap:12px;padding:12px 0;border-top:1px solid #eee}
+  .riga:first-of-type{border-top:0}
+  .ico{font-size:22px;width:28px;text-align:center}
+  .riga small{color:var(--mut);display:block;font-size:13px}
+  .riga div{font-size:17px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .btn{flex:1;min-width:150px;text-align:center;padding:13px;border-radius:12px;background:var(--ac);color:#fff;text-decoration:none;font-weight:600;border:0;font-size:16px;cursor:pointer}
+  .btn.sec{background:#e8f1fd;color:var(--ac)}
+  .back{background:none;border:0;color:var(--ac);font-size:16px;padding:0 0 14px;cursor:pointer}
+  .note{margin-top:14px;color:var(--mut);font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Il tuo evento</h1>
+  <p id="sub">Scegli la tua sede per vedere dove e quando.</p>
+</header>
+<main id="app"></main>
+
+<script>
+/* ===== DA MODIFICARE: un elemento per sede =====
+   data: AAAA-MM-GG   inizio/fine: HH:MM   */
+const EVENTI = [
+  {id:"roma",    sede:"Roma",    tipo:"Aperitivo", data:"2027-01-13", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
+  {id:"napoli",  sede:"Napoli",  tipo:"Pranzo",    data:"2027-01-14", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
+  {id:"bari",    sede:"Bari",    tipo:"Pranzo con catering in ufficio", data:"2027-01-21", inizio:"", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
+   viaggio:"Volo per Milano alle 22:25 (unico diretto). L'aeroporto dista 20 minuti dalla sede."},
+  {id:"palermo", sede:"Palermo", tipo:"Pranzo con catering in ufficio", data:"2027-01-22", inizio:"", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
+   viaggio:"Ultimo volo per Milano alle 22:40. L'aeroporto dista 40 minuti dalla sede."},
+  {id:"bologna", sede:"Bologna", tipo:"Aperitivo", data:"2027-01-26", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
+  {id:"milano",  sede:"Milano",  tipo:"Aperitivo", data:"2027-01-27", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""}
+];
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const fmtData = d => new Date(d+"T12:00").toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+
+function lista(){
+  $("#sub").textContent = "Scegli la tua sede per vedere dove e quando.";
+  app.innerHTML = EVENTI.map(e=>`
+    <button class="sede" onclick="apri('${e.id}')">
+      <div><b>${e.sede}</b><span>${cap(fmtData(e.data))}</span></div>
+      <div class="tag">${e.tipo}</div>
+    </button>`).join("");
+  history.replaceState(null,"",location.pathname);
+}
+
+function apri(id){
+  const e = EVENTI.find(x=>x.id===id); if(!e) return lista();
+  $("#sub").textContent = "Sede di " + e.sede;
+  const mappa = "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([e.luogo,e.indirizzo].filter(Boolean).join(", "));
+  app.innerHTML = `
+    <button class="back" onclick="lista()">‹ Cambia sede</button>
+    <div class="dettaglio">
+      <h2>${e.tipo}</h2>
+      <div class="riga"><div class="ico">📅</div><div><small>Data</small>${cap(fmtData(e.data))}</div></div>
+      <div class="riga"><div class="ico">🕒</div><div><small>Orario</small>${e.inizio?e.inizio+(e.fine?" – "+e.fine:""):"Da confermare"}</div></div>
+      ${(e.luogo||e.indirizzo)?`<div class="riga"><div class="ico">📍</div><div><small>Luogo</small>${[e.luogo,e.indirizzo].filter(Boolean).join("<br>")}</div></div>`:""}
+      ${e.viaggio?`<div class="riga"><div class="ico">✈️</div><div><small>Per chi riparte</small>${e.viaggio}</div></div>`:""}
+      <div class="btns">
+        ${e.indirizzo?`<a class="btn" href="${mappa}" target="_blank" rel="noopener">Apri la mappa</a>`:""}
+        <button class="btn sec" onclick="ics('${e.id}')">Aggiungi al calendario</button>
+      </div>
+      ${e.note?`<p class="note">${e.note}</p>`:""}
+    </div>`;
+  history.replaceState(null,"","?sede="+id);
+}
+
+function ics(id){
+  const e = EVENTI.find(x=>x.id===id);
+  const t = (d,h)=>d.replace(/-/g,"")+"T"+h.replace(":","")+"00";
+  const txt = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Evento//IT","BEGIN:VEVENT",
+    "UID:"+id+"-"+e.data+"@evento","DTSTAMP:"+t(e.data,"00:00"),
+    ...(e.inizio?["DTSTART:"+t(e.data,e.inizio),"DTEND:"+t(e.data,e.fine||e.inizio)]:["DTSTART;VALUE=DATE:"+e.data.replace(/-/g,"")]),
+    "SUMMARY:"+e.tipo+" - "+e.sede,"LOCATION:"+[e.luogo,e.indirizzo].filter(Boolean).join(", "),
+    "DESCRIPTION:"+(e.note||""),"END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt],{type:"text/calendar"}));
+  a.download="evento-"+id+".ics"; a.click();
+}
+
+const q = new URLSearchParams(location.search).get("sede");
+q ? apri(q) : lista();
+</script>
+</body>
+</html>
