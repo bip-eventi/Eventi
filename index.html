@@ -3,52 +3,145 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Il tuo evento</title>
+<title>Enterprise · Il tuo evento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#f5f5f7;--card:#fff;--tx:#1d1d1f;--mut:#6e6e73;--ac:#0071e3;--r:16px}
+  :root{
+    --choc:#3a1a10; --choc2:#5a2a18; --blu:#1f5fa8; --blu2:#2f80d8;
+    --crema:#fff6e6; --oro:#f4c04e; --rosso:#e53b3b; --ink:#241008;
+    --display:"Orbitron","Eurostile","Trebuchet MS",system-ui,sans-serif;
+    --testo:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--tx)}
-  header{padding:32px 20px 8px;max-width:560px;margin:auto}
-  h1{margin:0 0 6px;font-size:28px}
-  header p{margin:0;color:var(--mut)}
-  main{max-width:560px;margin:auto;padding:16px 20px 48px}
-  .sede{width:100%;text-align:left;background:var(--card);border:0;border-radius:var(--r);padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);cursor:pointer;font:inherit;color:inherit;display:flex;justify-content:space-between;align-items:center}
-  .sede b{font-size:18px}
-  .sede span{color:var(--mut);font-size:14px;display:block;margin-top:2px}
-  .tag{background:#e8f1fd;color:var(--ac);font-size:13px;padding:4px 10px;border-radius:999px;white-space:nowrap}
-  .dettaglio{background:var(--card);border-radius:var(--r);padding:22px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-  .dettaglio h2{margin:0 0 4px;font-size:24px}
-  .riga{display:flex;gap:12px;padding:12px 0;border-top:1px solid #eee}
-  .riga:first-of-type{border-top:0}
+  html{background:var(--blu)}
+  body{margin:0;min-height:100vh;font-family:var(--testo);color:var(--ink);position:relative;overflow-x:hidden}
+
+  /* spirale blu */
+  body::before{
+    content:"";position:fixed;inset:-50vmax;z-index:-2;
+    background:repeating-conic-gradient(from 0deg at 62% 70%, var(--blu) 0 9deg, var(--blu2) 9deg 18deg);
+    animation:gira 140s linear infinite;
+  }
+  /* trama a puntini (stile fumetto) */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(rgba(10,30,70,.28) 1.2px, transparent 1.6px) 0 0/7px 7px;
+  }
+  @keyframes gira{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){body::before{animation:none}}
+
+  /* testata cioccolato */
+  .top{position:relative;text-align:center}
+  .marrone{background:var(--choc);padding:18px 20px 6px}
+  .top .nave{width:min(86%,380px);height:auto;display:block;margin:0 auto}
+  .titolo{font-family:var(--display);font-weight:800;color:#fff;margin:6px 0 0;
+    font-size:clamp(38px,11vw,58px);letter-spacing:.5px;line-height:1}
+  .edizione{font-family:var(--display);font-weight:600;color:var(--oro);
+    font-size:clamp(13px,3.6vw,17px);letter-spacing:2px;text-transform:uppercase;margin:6px 0 0}
+  .colata{display:block;width:100%;height:70px;margin-top:-1px}
+  .scia{position:absolute;color:#fff}
+  .scia svg{width:100%;height:100%;display:block}
+
+  .sotto{max-width:520px;margin:-4px auto 0;padding:0 18px 36px}
+  .sub{margin:14px 0 14px;text-align:center;color:#fff;font-weight:700;font-size:17px;
+    text-shadow:0 2px 0 rgba(10,20,50,.55)}
+
+  /* schede */
+  .sede{width:100%;text-align:left;border:3px solid var(--ink);border-radius:18px;background:var(--crema);
+    padding:14px 16px;margin-bottom:14px;box-shadow:5px 5px 0 var(--ink);cursor:pointer;font:inherit;color:inherit;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;transition:transform .12s, box-shadow .12s}
+  .sede:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+  .sede b{font-family:var(--display);font-size:20px;display:block}
+  .sede span{display:block;margin-top:3px;font-size:14px;color:#6a4a3a}
+  .freccia{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;color:var(--choc)}
+  .tag{background:var(--choc);color:var(--oro);font-family:var(--display);font-weight:600;font-size:12px;
+    padding:7px 11px;border-radius:999px;text-align:center;max-width:46%;line-height:1.25}
+
+  /* dettaglio */
+  .back{background:var(--oro);border:3px solid var(--ink);border-radius:999px;padding:8px 16px;margin-bottom:14px;
+    font:700 15px var(--testo);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+  .dettaglio{background:var(--crema);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);overflow:hidden}
+  .dettaglio h2{margin:0;padding:16px 18px;background:var(--choc);color:#fff;font-family:var(--display);font-size:21px;line-height:1.25}
+  .corpo{padding:6px 18px 18px}
+  .riga{display:flex;gap:12px;padding:13px 0;border-top:2px dashed rgba(36,16,8,.18)}
+  .riga:first-child{border-top:0}
   .ico{font-size:22px;width:28px;text-align:center}
-  .riga small{color:var(--mut);display:block;font-size:13px}
+  .riga small{display:block;color:#8a6a58;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
   .riga div{font-size:17px}
-  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-  .btn{flex:1;min-width:150px;text-align:center;padding:13px;border-radius:12px;background:var(--ac);color:#fff;text-decoration:none;font-weight:600;border:0;font-size:16px;cursor:pointer}
-  .btn.sec{background:#e8f1fd;color:var(--ac)}
-  .back{background:none;border:0;color:var(--ac);font-size:16px;padding:0 0 14px;cursor:pointer}
-  .note{margin-top:14px;color:var(--mut);font-size:14px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .btn{flex:1;min-width:150px;text-align:center;padding:13px;border-radius:14px;background:var(--oro);color:var(--ink);
+    text-decoration:none;font:700 16px var(--testo);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);cursor:pointer}
+  .btn.sec{background:#fff}
+  .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+  .note{margin:16px 0 0;padding:12px 14px;background:#fff;border:2px solid var(--ink);border-radius:12px;font-size:15px}
+
+  footer{max-width:520px;margin:0 auto;padding:0 22px 26px;text-align:right}
+  .bip{font-family:var(--display);font-weight:800;color:#fff;font-size:26px;text-shadow:0 2px 0 rgba(10,20,50,.55)}
 </style>
 </head>
 <body>
-<header>
-  <h1>Il tuo evento</h1>
-  <p id="sub">Scegli la tua sede per vedere dove e quando.</p>
+
+<!-- elementi grafici riusabili -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="stella" viewBox="0 0 40 40"><path fill="currentColor" d="M20 0c1.6 10.5 8.9 17.9 20 20-11.100 2.100-18.400 9.500-20 20-1.600-10.500-8.900-17.900-20-20C11.100 17.900 18.400 10.500 20 0z"/></symbol>
+    <linearGradient id="argento" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#9fb6e6"/></linearGradient>
+    <linearGradient id="cielo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6aa6ff"/><stop offset="1" stop-color="#2557b8"/></linearGradient>
+  </defs>
+</svg>
+
+<header class="top">
+<div class="marrone">
+  <span class="scia" style="left:7%;top:20px;width:30px;height:30px"><svg><use href="#stella"/></svg></span>
+  <span class="scia" style="right:9%;top:14px;width:36px;height:36px"><svg><use href="#stella"/></svg></span>
+  <span class="scia" style="right:6%;top:96px;width:22px;height:22px"><svg><use href="#stella"/></svg></span>
+
+  <!-- astronave (disegno originale) -->
+  <svg class="nave" viewBox="0 0 380 150" role="img" aria-label="Astronave">
+    <g stroke="#1b2a4a" stroke-width="3" stroke-linejoin="round">
+      <path d="M92 82 L170 66 L176 80 L100 98 Z" fill="url(#argento)"/>
+      <ellipse cx="258" cy="52" rx="108" ry="28" fill="url(#cielo)" transform="rotate(-6 258 52)"/>
+      <ellipse cx="258" cy="46" rx="72" ry="16" fill="url(#argento)" transform="rotate(-6 258 46)"/>
+      <ellipse cx="300" cy="44" rx="18" ry="6" fill="var(--oro)" transform="rotate(-6 300 44)"/>
+      <path d="M170 80 L240 96 L236 110 L168 98 Z" fill="url(#argento)"/>
+      <rect x="40" y="62" width="104" height="18" rx="9" fill="url(#argento)" transform="rotate(-6 92 71)"/>
+      <rect x="130" y="102" width="112" height="20" rx="10" fill="url(#argento)" transform="rotate(4 186 112)"/>
+    </g>
+    <circle cx="46" cy="66" r="8" fill="var(--rosso)" stroke="#1b2a4a" stroke-width="3"/>
+    <circle cx="132" cy="108" r="8" fill="var(--rosso)" stroke="#1b2a4a" stroke-width="3"/>
+    <path d="M6 96 C26 88 40 90 58 96" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    <path d="M14 112 C34 104 52 104 70 110" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+  </svg>
+
+  <h1 class="titolo">Enterprise</h1>
+  <p class="edizione">Chocolate edition</p>
+
+</div>
+  <!-- cioccolato che cola -->
+  <svg class="colata" viewBox="0 0 400 70" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#3a1a10" d="M0 0H400V22C392 22 390 52 380 52C370 52 368 26 356 26C340 26 338 46 326 46C316 46 314 20 300 20C286 20 284 62 270 62C258 62 256 28 242 28C228 28 226 40 214 40C204 40 202 16 188 16C172 16 170 58 156 58C144 58 142 30 128 30C114 30 112 48 100 48C90 48 88 22 74 22C60 22 58 56 44 56C32 56 30 28 16 28C8 28 4 34 0 38Z"/>
+  </svg>
 </header>
-<main id="app"></main>
+
+<div class="sotto">
+  <p class="sub" id="sub">Scegli la tua sede per vedere dove e quando.</p>
+  <main id="app"></main>
+</div>
+<footer><span class="bip">bip.</span></footer>
 
 <script>
 /* ===== DA MODIFICARE: un elemento per sede =====
-   data: AAAA-MM-GG   inizio/fine: HH:MM   */
+   data: AAAA-MM-GG   inizio/fine: HH:MM (lascia "" se non è ancora noto) */
 const EVENTI = [
-  {id:"roma",    sede:"Roma",    tipo:"Aperitivo", data:"2027-01-13", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
-  {id:"napoli",  sede:"Napoli",  tipo:"Pranzo",    data:"2027-01-14", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
-  {id:"bari",    sede:"Bari",    tipo:"Pranzo con catering in ufficio", data:"2027-01-21", inizio:"", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
+  {id:"roma",    sede:"Roma",    tipo:"Festa",     data:"2027-01-13", inizio:"19:30", fine:"", luogo:"Party Foundation presso Eden Experience", indirizzo:"Piazzale dello Stadio Olimpico, 5 – Roma", note:"", viaggio:""},
+  {id:"napoli",  sede:"Napoli",  tipo:"Pranzo",    data:"2027-01-15", inizio:"11:30", fine:"", luogo:"In ufficio", indirizzo:"", note:"", viaggio:""},
+  {id:"bari",    sede:"Bari",    tipo:"Pranzo",    data:"2027-01-21", inizio:"11:30", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
    viaggio:"Volo per Milano alle 22:25 (unico diretto). L'aeroporto dista 20 minuti dalla sede."},
-  {id:"palermo", sede:"Palermo", tipo:"Pranzo con catering in ufficio", data:"2027-01-22", inizio:"", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
+  {id:"palermo", sede:"Palermo", tipo:"Pranzo",    data:"2027-01-22", inizio:"11:30", fine:"", luogo:"In ufficio", indirizzo:"", note:"",
    viaggio:"Ultimo volo per Milano alle 22:40. L'aeroporto dista 40 minuti dalla sede."},
-  {id:"bologna", sede:"Bologna", tipo:"Aperitivo", data:"2027-01-26", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
-  {id:"milano",  sede:"Milano",  tipo:"Aperitivo", data:"2027-01-27", inizio:"", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""}
+  {id:"bologna", sede:"Bologna", tipo:"Aperitivo", data:"2027-01-26", inizio:"19:00", fine:"", luogo:"", indirizzo:"", note:"", viaggio:""},
+  {id:"milano",  sede:"Milano",  tipo:"Festa",     data:"2027-01-27", inizio:"19:30", fine:"", luogo:"Party Foundation presso 55 Milano", indirizzo:"Via Piero della Francesca, 55 – Milano", note:"", viaggio:""}
 ];
 
 const $ = s => document.querySelector(s);
@@ -61,30 +154,31 @@ function lista(){
   app.innerHTML = EVENTI.map(e=>`
     <button class="sede" onclick="apri('${e.id}')">
       <div><b>${e.sede}</b><span>${cap(fmtData(e.data))}</span></div>
-      <div class="tag">${e.tipo}</div>
+      <div class="freccia">›</div>
     </button>`).join("");
-  history.replaceState(null,"",location.pathname);
+  try{history.replaceState(null,"",location.pathname)}catch(_){}
 }
 
 function apri(id){
   const e = EVENTI.find(x=>x.id===id); if(!e) return lista();
   $("#sub").textContent = "Sede di " + e.sede;
-  const mappa = "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([e.luogo,e.indirizzo].filter(Boolean).join(", "));
+  const mappa = "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(e.mappa||[e.luogo,e.indirizzo].filter(Boolean).join(", "));
   app.innerHTML = `
     <button class="back" onclick="lista()">‹ Cambia sede</button>
     <div class="dettaglio">
       <h2>${e.tipo}</h2>
-      <div class="riga"><div class="ico">📅</div><div><small>Data</small>${cap(fmtData(e.data))}</div></div>
-      <div class="riga"><div class="ico">🕒</div><div><small>Orario</small>${e.inizio?e.inizio+(e.fine?" – "+e.fine:""):"Da confermare"}</div></div>
-      ${(e.luogo||e.indirizzo)?`<div class="riga"><div class="ico">📍</div><div><small>Luogo</small>${[e.luogo,e.indirizzo].filter(Boolean).join("<br>")}</div></div>`:""}
-      ${e.viaggio?`<div class="riga"><div class="ico">✈️</div><div><small>Per chi riparte</small>${e.viaggio}</div></div>`:""}
-      <div class="btns">
-        ${e.indirizzo?`<a class="btn" href="${mappa}" target="_blank" rel="noopener">Apri la mappa</a>`:""}
-        <button class="btn sec" onclick="ics('${e.id}')">Aggiungi al calendario</button>
+      <div class="corpo">
+        <div class="riga"><div class="ico">📅</div><div><small>Data</small>${cap(fmtData(e.data))}</div></div>
+        <div class="riga"><div class="ico">🕒</div><div><small>Orario</small>${e.inizio?e.inizio+(e.fine?" – "+e.fine:""):"Da confermare"}</div></div>
+        ${(e.luogo||e.indirizzo)?`<div class="riga"><div class="ico">📍</div><div><small>Luogo</small>${[e.luogo,e.indirizzo].filter(Boolean).join("<br>")}</div></div>`:""}
+        <div class="btns">
+          ${(e.indirizzo||e.mappa)?`<a class="btn" href="${mappa}" target="_blank" rel="noopener">Apri la mappa</a>`:""}
+          <button class="btn sec" onclick="ics('${e.id}')">Aggiungi al calendario</button>
+        </div>
+        ${e.note?`<p class="note">${e.note}</p>`:""}
       </div>
-      ${e.note?`<p class="note">${e.note}</p>`:""}
     </div>`;
-  history.replaceState(null,"","?sede="+id);
+  try{history.replaceState(null,"","?sede="+id)}catch(_){}
 }
 
 function ics(id){
